@@ -19,35 +19,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
-@RequestMapping("/sources/{sourceId}/quotes")
+
+@RequestMapping("/quotes")
+
 public class QuoteController {
 
-  private SourceRepository sourceRepository;
+
   private QuoteRepository quoteRepository;
 
   @Autowired
-  public QuoteController(SourceRepository sourceRepository, QuoteRepository quoteRepository) {
-    this.sourceRepository = sourceRepository;
+
+  public QuoteController(QuoteRepository quoteRepository) {
     this.quoteRepository = quoteRepository;
+
   }
 
-  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<Quote> list(@PathVariable("sourceId") UUID sourceId) {
-    return sourceRepository.findById(sourceId).get().getQuotes();
+
+
+  @GetMapping(value = "random", produces = MediaType.APPLICATION_JSON_VALUE)
+
+  public Quote getRandom() {
+    return quoteRepository.findRandom().get();
+
   }
 
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-   produces = MediaType.APPLICATION_JSON_VALUE)
-  public Quote post(@PathVariable("sourceId") UUID sourceId, @RequestBody Quote quote){
-    Source source = sourceRepository.findById(sourceId).get();
-    quote.setSource(source);
-    quoteRepository.save(quote);
-    return quote;
-  }
-  @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Source not found")
+
+
+  //TODO Add method for searching by fragment.
+  @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Quote not found")
   @ExceptionHandler(NoSuchElementException.class)
   public void notFound() {}
+
+
+
 }
 
 

@@ -1,6 +1,7 @@
 package edu.cnm.deepdive.qod.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.cnm.deepdive.qod.view.FlatQuote;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +22,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.lang.NonNull;
 
 @Entity
-public class Quote {
+public class Quote implements FlatQuote {
 
   @Id
   @GeneratedValue(generator = "uuid2")
